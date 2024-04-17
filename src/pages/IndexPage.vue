@@ -1,5 +1,5 @@
 <template>
-  <q-page class="row justify-start items-start">
+  <q-page class="row justify-start items-start q-pa-md">
     <basic-info-section
       :authoring="authoring"
       :beer="beer"
@@ -87,7 +87,7 @@ const others: Others[] = [
   {
     name: 'Nutriente de levedura',
     quantity: 1,
-    adition: 'Fermentação primária',
+    adition: 'Primária',
     obs: '',
   },
   {

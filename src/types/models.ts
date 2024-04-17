@@ -13,6 +13,19 @@ export type ProductionDetails = {
   productionDate: string
 }
 
+export type ProductionState =
+  | 'Mostura'
+  | 'Lavagem'
+  | 'Fervura'
+  | 'Pós-Fervura'
+  | 'Primária'
+  | 'Secundária'
+  | 'Engarrafamento'
+  | 'Dry Hop'
+  | 'Aroma (HopStand)'
+  | 'Primeiro Mosto'
+  | 'Starter'
+
 export type Fermentable = {
   name: string
   quantity: number
@@ -22,7 +35,7 @@ export type Hop = {
   name: string
   quantity: number
   alphaAcid: number
-  adition: string
+  adition: ProductionState
   timeAdition: number
   ibu: number
   temperature?: number
@@ -31,7 +44,7 @@ export type Hop = {
 export type Others = {
   name: string
   quantity: number
-  adition: string
+  adition: ProductionState
   obs: string
 }
 
