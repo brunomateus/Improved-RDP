@@ -2,14 +2,39 @@
 import { computed } from 'vue'
 import { QTableColumn } from 'quasar'
 import type { Recipe, Fermentable, Hop } from '../types/models'
-const { fermentables, hops } = defineProps<Recipe>()
+const { fermentables, hops, others } = defineProps<Recipe>()
 
-const totalFermentable = computed(() =>
+const totalFermentables = computed(() =>
   fermentables.reduce(
     (acc: number, current: Fermentable) => acc + current.quantity,
     0
   )
 )
+
+const fermentablesCols: QTableColumn[] = [
+  {
+    name: 'Nome',
+    label: 'Nome',
+    field: 'name',
+    sortable: true,
+    align: 'left',
+  },
+  {
+    name: 'Quatidade',
+    field: 'quantity',
+    label: 'Quantidade',
+    sortable: true,
+    align: 'right',
+  },
+  {
+    name: 'Percentage',
+    field: (fermentable: Fermentable) =>
+      `${((fermentable.quantity / totalFermentables.value) * 100).toFixed(2)}%`,
+    label: '%',
+    sortable: true,
+    align: 'right',
+  },
+]
 
 const hopAditionsCols: QTableColumn[] = [
   {
@@ -64,7 +89,7 @@ const hopAditionsCols: QTableColumn[] = [
   },
 ]
 
-const fermentablesCols: QTableColumn[] = [
+const othersCols: QTableColumn[] = [
   {
     name: 'Nome',
     label: 'Nome',
@@ -75,15 +100,52 @@ const fermentablesCols: QTableColumn[] = [
   {
     name: 'Quatidade',
     field: 'quantity',
-    label: 'Quantidade',
+    label: 'Quantidade (g)',
     sortable: true,
     align: 'right',
   },
   {
-    name: 'Percentage',
-    field: (fermentable: Fermentable) =>
-      `${((fermentable.quantity / totalFermentable.value) * 100).toFixed(2)}%`,
-    label: '%',
+    name: 'Etapa de adição',
+    label: 'Etapa de adição',
+    field: 'adition',
+    sortable: true,
+    align: 'left',
+  },
+  {
+    name: 'Observação',
+    field: 'obs',
+    label: 'Observação',
+    sortable: true,
+    align: 'right',
+  },
+]
+
+const yeastCols: QTableColumn[] = [
+  {
+    name: 'Nome',
+    label: 'Nome',
+    field: 'name',
+    sortable: true,
+    align: 'left',
+  },
+  {
+    name: 'Quatidade',
+    field: 'quantity',
+    label: 'Quantidade (g)',
+    sortable: true,
+    align: 'right',
+  },
+  {
+    name: 'Tipo',
+    label: 'Tipo',
+    field: 'type',
+    sortable: true,
+    align: 'left',
+  },
+  {
+    name: 'Dosagem',
+    field: 'dose',
+    label: 'Dosagem',
     sortable: true,
     align: 'right',
   },
@@ -94,20 +156,40 @@ const fermentablesCols: QTableColumn[] = [
   <section class="col-12">
     <h2>Receita</h2>
     <div class="row items-stretch q-col-gutter-md">
-      <div class="col-5">
+      <div class="col-6">
         <q-table
+          class="full-height"
           title="🌾 Fermentáveis"
           :rows="fermentables"
           :columns="fermentablesCols"
           row-key="name"
         />
       </div>
-      <div class="col-7">
+      <div class="col-6">
         <q-table
           class="full-height"
           title="🌳 Lupulagem"
           :rows="hops"
           :columns="hopAditionsCols"
+          row-key="name"
+        />
+      </div>
+
+      <div class="col-6">
+        <q-table
+          class="full-height"
+          title="🔢 Diversos"
+          :rows="others"
+          :columns="othersCols"
+          row-key="name"
+        />
+      </div>
+      <div class="col-6">
+        <q-table
+          class="full-height"
+          title="🧪Levedura"
+          :rows="yeasts"
+          :columns="yeastCols"
           row-key="name"
         />
       </div>

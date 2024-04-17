@@ -8,6 +8,8 @@
     <recipe-section
       :fermentables="fermentables"
       :hops="hopAditions"
+      :others="others"
+      :yeasts="yeast"
     ></recipe-section>
   </q-page>
 </template>
@@ -25,6 +27,8 @@ import {
   ProductionDetails,
   Fermentable,
   Hop,
+  Others,
+  Yeast,
 } from 'src/types/models'
 
 const authoring = ref<AuthoringInformation>({
@@ -70,6 +74,48 @@ const hopAditions: Hop[] = [
     adition: 'Fervura',
     timeAdition: 60,
     ibu: 24,
+  },
+]
+
+const others: Others[] = [
+  {
+    name: 'Nutriente de levedura',
+    quantity: 0.5,
+    adition: 'Starter',
+    obs: '',
+  },
+  {
+    name: 'Nutriente de levedura',
+    quantity: 1,
+    adition: 'Fermentação primária',
+    obs: '',
+  },
+  {
+    name: 'Sulfato de magnésio',
+    quantity: 4,
+    adition: 'Mostura',
+    obs: '',
+  },
+  {
+    name: 'Sulfato de cálcio',
+    quantity: 5.3,
+    adition: 'Mostura',
+    obs: '',
+  },
+  {
+    name: 'Cloreto de cálcio',
+    quantity: 13.8,
+    adition: 'Mostura',
+    obs: '',
+  },
+]
+
+const yeast: Yeast[] = [
+  {
+    name: 'Fermentis S-04',
+    quantity: 1,
+    type: 'Seca',
+    dose: '',
   },
 ]
 </script>

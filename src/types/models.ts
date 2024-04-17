@@ -28,7 +28,23 @@ export type Hop = {
   temperature?: number
 }
 
+export type Others = {
+  name: string
+  quantity: number
+  adition: string
+  obs: string
+}
+
+export type Yeast = {
+  name: string
+  quantity: number
+  type: 'Seca' | 'Líquida'
+  dose: string
+}
+
 export type Recipe = {
   fermentables: Fermentable[]
   hops: Hop[]
+  others: Others[]
+  yeasts: Yeast[]
 }
