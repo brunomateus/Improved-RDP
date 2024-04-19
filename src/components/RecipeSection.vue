@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { QTableColumn } from 'quasar'
+import GenericSection from './GenericSection.vue'
 import type { Recipe, Fermentable, Hop } from '../types/models'
 const { fermentables, hops, others } = defineProps<Recipe>()
 
@@ -153,8 +154,7 @@ const yeastCols: QTableColumn[] = [
 </script>
 
 <template>
-  <section class="col-12">
-    <h2>Receita</h2>
+  <generic-section title="Receita">
     <div class="row items-stretch q-col-gutter-md">
       <div class="col-6">
         <q-table
@@ -194,5 +194,5 @@ const yeastCols: QTableColumn[] = [
         />
       </div>
     </div>
-  </section>
+  </generic-section>
 </template>

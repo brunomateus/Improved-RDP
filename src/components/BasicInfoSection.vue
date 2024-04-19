@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import GenericSection from './GenericSection.vue'
 import { AuthoringInformation, Beer, ProductionDetails } from 'src/types/models'
 
 const authoring = defineModel<AuthoringInformation>('authoring', {
@@ -14,8 +15,7 @@ const details = defineModel<ProductionDetails>('details', {
 </script>
 
 <template>
-  <section class="col-12">
-    <h2>Informações básicas</h2>
+  <generic-section title="Informações básicas">
     <div class="row q-col-gutter-md">
       <q-input
         class="col-12"
@@ -70,5 +70,5 @@ const details = defineModel<ProductionDetails>('details', {
         label="Estratégias para alcançar os objetivos"
       />
     </div>
-  </section>
+  </generic-section>
 </template>
