@@ -52,6 +52,7 @@ function parseBatch(content: BFBatchScheme) {
   beer.value.style = recipe.style.name
 
   details.value.productionDate = date.formatDate(content.brewDate, 'YYYY/MM/DD')
+  details.value.equipment = recipe.equipment.name
 
   fermentables.value = parseBacthFermentables(batchFermentables)
   hopAditions.value = parseBatchHops(recipe.hops)
@@ -102,6 +103,7 @@ const details = ref<ProductionDetails>({
   goals: '',
   strategies: '',
   productionDate: date.formatDate(Date.now(), 'YYYY/MM/DD'),
+  equipment: '',
 })
 
 const fermentables = ref<Fermentable[]>([])

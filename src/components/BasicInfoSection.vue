@@ -30,17 +30,25 @@ const details = defineModel<ProductionDetails>('details', {
         label="Nome do cervejeiro"
       />
       <q-input
-        class="col-8"
+        class="col-6"
         outlined
         v-model="beer.name"
         label="Nome da cerveja"
       />
+
+      <q-input
+        class="col-3"
+        outlined
+        v-model="details.equipment"
+        label="Equipamento"
+      />
+
       <q-input
         outlined
         v-model="details.productionDate"
         label="Data de produção"
         mask="date"
-        class="col-4"
+        class="col-3"
         :rules="['date']"
       >
         <template v-slot:append>

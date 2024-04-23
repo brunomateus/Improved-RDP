@@ -12,6 +12,7 @@ export type ProductionDetails = {
   goals: string
   strategies: string
   productionDate: string
+  equipment: string
 }
 
 export type ProductionState =
@@ -104,6 +105,11 @@ export type BFRecipe = {
     source: BFWater
     target: BFWater
     mashAdjustments: WaterAdjustments
+  }
+  equipment: {
+    name: string
+    efficiency: number
+    mashEfficiency: number
   }
 }
 
