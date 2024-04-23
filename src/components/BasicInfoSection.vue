@@ -18,10 +18,16 @@ const details = defineModel<ProductionDetails>('details', {
   <generic-section title="Informações básicas">
     <div class="row q-col-gutter-md">
       <q-input
-        class="col-12"
+        class="col-6"
         outlined
         v-model="authoring.brewery"
         label="Nome da cervejaria"
+      />
+      <q-input
+        class="col-6"
+        outlined
+        v-model="authoring.brewer"
+        label="Nome do cervejeiro"
       />
       <q-input
         class="col-8"

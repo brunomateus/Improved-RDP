@@ -1,15 +1,12 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import { QTableColumn } from 'quasar'
 import GenericSection from './GenericSection.vue'
-import type { Recipe, Fermentable, Hop } from '../types/models'
+import type { Recipe, Fermentable, Hop, Yeast, Misc } from '../types/models'
 const { fermentables, hops, others } = defineProps<Recipe>()
 
-const totalFermentables = computed(() =>
-  fermentables.reduce(
-    (acc: number, current: Fermentable) => acc + current.quantity,
-    0
-  )
+const totalFermentables = fermentables.reduce(
+  (acc: number, current: Fermentable) => acc + current.amount,
+  0
 )
 
 const fermentablesCols: QTableColumn[] = [
@@ -22,7 +19,7 @@ const fermentablesCols: QTableColumn[] = [
   },
   {
     name: 'Quatidade',
-    field: 'quantity',
+    field: 'amount',
     label: 'Quantidade',
     sortable: true,
     align: 'right',
@@ -30,7 +27,7 @@ const fermentablesCols: QTableColumn[] = [
   {
     name: 'Percentage',
     field: (fermentable: Fermentable) =>
-      `${((fermentable.quantity / totalFermentables.value) * 100).toFixed(2)}%`,
+      `${((fermentable.amount / totalFermentables) * 100).toFixed(2)}%`,
     label: '%',
     sortable: true,
     align: 'right',
@@ -47,14 +44,14 @@ const hopAditionsCols: QTableColumn[] = [
   },
   {
     name: 'Quatidade',
-    field: 'quantity',
+    field: 'amount',
     label: 'Quantidade (g)',
     sortable: true,
     align: 'right',
   },
   {
     name: 'Alpha ácido',
-    field: 'alphaAcid',
+    field: 'alpha',
     label: 'AA(%)',
     sortable: true,
     align: 'right',
@@ -62,13 +59,13 @@ const hopAditionsCols: QTableColumn[] = [
   {
     name: 'Etapa de adição',
     label: 'Etapa de adição',
-    field: 'adition',
+    field: 'use',
     sortable: true,
     align: 'left',
   },
   {
     name: 'Tempo da adição',
-    field: 'timeAdition',
+    field: 'time',
     label: 'Tempo da adição',
     sortable: true,
     align: 'right',
@@ -76,7 +73,7 @@ const hopAditionsCols: QTableColumn[] = [
   {
     name: 'Temperatura de adição',
     field: (hop: Hop) =>
-      hop.temperature ? hop.temperature : hop.adition == 'Fervura' ? 100 : '',
+      hop.temp ? hop.temp : hop.use == 'Fervura' ? 100 : '',
     label: 'Temperatura de adição',
     sortable: true,
     align: 'right',
@@ -100,15 +97,15 @@ const othersCols: QTableColumn[] = [
   },
   {
     name: 'Quatidade',
-    field: 'quantity',
-    label: 'Quantidade (g)',
+    label: 'Quantidade',
     sortable: true,
+    field: (misc: Misc) => `${misc.amount} ${misc.unit}`,
     align: 'right',
   },
   {
     name: 'Etapa de adição',
     label: 'Etapa de adição',
-    field: 'adition',
+    field: 'use',
     sortable: true,
     align: 'left',
   },
@@ -131,24 +128,17 @@ const yeastCols: QTableColumn[] = [
   },
   {
     name: 'Quatidade',
-    field: 'quantity',
-    label: 'Quantidade (g)',
+    label: 'Quantidade',
+    field: (yeast: Yeast) => `${yeast.amount} ${yeast.unit}`,
     sortable: true,
     align: 'right',
   },
   {
     name: 'Tipo',
     label: 'Tipo',
-    field: 'type',
+    field: 'form',
     sortable: true,
     align: 'left',
-  },
-  {
-    name: 'Dosagem',
-    field: 'dose',
-    label: 'Dosagem',
-    sortable: true,
-    align: 'right',
   },
 ]
 </script>
