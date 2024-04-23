@@ -3,6 +3,7 @@ defineOptions({
   name: 'IndexPage',
 })
 import { ref } from 'vue'
+import { date } from 'quasar'
 import BasicInfoSection from 'src/components/BasicInfoSection.vue'
 import RecipeSection from 'src/components/RecipeSection.vue'
 import WaterSection from 'src/components/WaterSection.vue'
@@ -49,6 +50,8 @@ function parseBatch(content: BFBatchScheme) {
 
   beer.value.name = recipe.name
   beer.value.style = recipe.style.name
+
+  details.value.productionDate = date.formatDate(content.brewDate, 'YYYY/MM/DD')
 
   fermentables.value = parseBacthFermentables(batchFermentables)
   hopAditions.value = parseBatchHops(recipe.hops)
@@ -98,7 +101,7 @@ const beer = ref<Beer>({} as Beer)
 const details = ref<ProductionDetails>({
   goals: '',
   strategies: '',
-  productionDate: new Date().toDateString(),
+  productionDate: date.formatDate(Date.now(), 'YYYY/MM/DD'),
 })
 
 const fermentables = ref<Fermentable[]>([])
