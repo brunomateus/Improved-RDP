@@ -64,6 +64,27 @@ export type BatchMisc = {
   use: string
 }
 
+export type BFWater = {
+  name: string
+  sulfate: number
+  chloride: number
+  bicarbonate: number
+  sodium: number
+  magnesium: number
+  calcium: number
+  ph: number
+}
+
+export type WaterAdjustments = {
+  calciumCarbonate: number
+  sodiumBicarbonate: number
+  calciumSulfate: number
+  magnesiumSulfate: number
+  sodiumChloride: number
+  calciumChloride: number
+  calciumHydroxide: number
+}
+
 export type BFRecipe = {
   name: string
   author: string
@@ -74,6 +95,16 @@ export type BFRecipe = {
     type: string
   }
   hops: BatchHop[]
+  data: {
+    mashWaterAmount: number
+    mashVolume: number
+    totalWater: number
+  }
+  water: {
+    source: BFWater
+    target: BFWater
+    mashAdjustments: WaterAdjustments
+  }
 }
 
 export type BFBatchScheme = {
@@ -89,30 +120,38 @@ export type BFBatchScheme = {
 export type Fermentable = Pick<BatchFermentable, 'name' | 'amount'>
 
 export type Hop =
-  | Pick<BatchHop, 'name' | 'amount' | 'alpha' | 'use' | 'time' | 'ibu'>
-  | { temp?: number }
+  | Pick<BatchHop, 'name' | 'amount' | 'alpha' | 'use' | 'time' | 'ibu'> & {
+      temp?: number
+    }
 
 export type Misc =
-  | Pick<BatchMisc, 'name' | 'amount' | 'unit' | 'use'>
-  | {
+  | Pick<BatchMisc, 'name' | 'amount' | 'unit' | 'use'> & {
       obs?: string
     }
 
 export type Yeast = Pick<BacthYeast, 'name' | 'amount' | 'form' | 'unit'>
 
-export type WaterProfile = {
-  name: string
-  calcium: number
-  magnesium: number
-  sodium: number
-  chloride: number
-  sulfate: number
-  bicarbonate: number
-}
+export type WaterProfile = Pick<
+  BFWater,
+  | 'name'
+  | 'calcium'
+  | 'chloride'
+  | 'bicarbonate'
+  | 'magnesium'
+  | 'sodium'
+  | 'sulfate'
+>
 
 export type Recipe = {
   fermentables: Fermentable[]
   hops: Hop[]
   others: Misc[]
   yeasts: Yeast[]
+  water: {
+    mash: number
+    sparge: number
+    source: WaterProfile
+    target: WaterProfile
+    adjustmens: WaterAdjustments
+  }
 }

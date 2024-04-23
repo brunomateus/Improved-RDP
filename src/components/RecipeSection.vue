@@ -2,7 +2,8 @@
 import { QTableColumn } from 'quasar'
 import GenericSection from './GenericSection.vue'
 import type { Recipe, Fermentable, Hop, Yeast, Misc } from '../types/models'
-const { fermentables, hops, others } = defineProps<Recipe>()
+const { fermentables, hops, yeasts, others } =
+  defineProps<Pick<Recipe, 'fermentables' | 'hops' | 'yeasts' | 'others'>>()
 
 const totalFermentables = fermentables.reduce(
   (acc: number, current: Fermentable) => acc + current.amount,

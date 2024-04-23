@@ -20,6 +20,7 @@ import {
   BatchHop,
   BacthYeast,
   BatchMisc,
+  WaterAdjustments,
 } from 'src/types/models'
 
 const upload = ref(false)
@@ -53,6 +54,12 @@ function parseBatch(content: BFBatchScheme) {
   hopAditions.value = parseBatchHops(recipe.hops)
   yeasts.value = parseBatchYeast(batchYeasts)
   others.value = parseBatchMisc(batchMiscs)
+
+  mashWater.value = recipe.data.mashWaterAmount
+  spargeWater.value = recipe.data.mashVolume
+  sourceWater.value = recipe.water.source
+  targetWater.value = recipe.water.target
+  waterAdjustemts.value = recipe.water.mashAdjustments
 }
 
 function parseBacthFermentables(
@@ -98,26 +105,11 @@ const fermentables = ref<Fermentable[]>([])
 const hopAditions = ref<Hop[]>([])
 const others = ref<Misc[]>([])
 const yeasts = ref<Yeast[]>([])
-
-const sourceWater: WaterProfile = {
-  name: 'Olympia',
-  calcium: 2,
-  magnesium: 3,
-  sodium: 13,
-  chloride: 17,
-  sulfate: 6,
-  bicarbonate: 21,
-}
-
-const targetWater: WaterProfile = {
-  name: 'IRA',
-  calcium: 120,
-  magnesium: 10,
-  sodium: 0,
-  chloride: 140,
-  sulfate: 90,
-  bicarbonate: 20,
-}
+const mashWater = ref(0)
+const spargeWater = ref(0)
+const sourceWater = ref<WaterProfile>({} as WaterProfile)
+const targetWater = ref<WaterProfile>({} as WaterProfile)
+const waterAdjustemts = ref<WaterAdjustments>({} as WaterAdjustments)
 </script>
 
 <template>
@@ -134,10 +126,11 @@ const targetWater: WaterProfile = {
       :yeasts="yeasts"
     ></recipe-section>
     <water-section
-      :brewing-water="10"
-      :washing-water="10"
+      :mashing-water="mashWater"
+      :sparging-water="spargeWater"
       :source="sourceWater"
       :target="targetWater"
+      :adjustments="waterAdjustemts"
     ></water-section>
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
       <q-fab icon="keyboard_arrow_up" direction="up" color="primary">
