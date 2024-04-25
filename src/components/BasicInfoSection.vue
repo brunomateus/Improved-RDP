@@ -1,15 +1,28 @@
 <script setup lang="ts">
 import GenericSection from './GenericSection.vue'
-import { AuthoringInformation, Beer, ProductionDetails } from 'src/types/models'
+import { Beer } from 'src/types/models'
 
-const authoring = defineModel<AuthoringInformation>('authoring', {
+const brewer = defineModel<string>('brewer', {
   required: true,
 })
+
+const brewery = defineModel<string>('brewery', {
+  required: true,
+})
+
 const beer = defineModel<Beer>('beer', {
   required: true,
 })
 
-const details = defineModel<ProductionDetails>('details', {
+const equipment = defineModel<string>('equipment', {
+  required: true,
+})
+
+const strategies = defineModel<string>('strategies', {
+  required: true,
+})
+
+const productionDate = defineModel<string>('mashDate', {
   required: true,
 })
 </script>
@@ -20,13 +33,13 @@ const details = defineModel<ProductionDetails>('details', {
       <q-input
         class="col-6"
         outlined
-        v-model="authoring.brewery"
+        v-model="brewery"
         label="Nome da cervejaria"
       />
       <q-input
         class="col-6"
         outlined
-        v-model="authoring.brewer"
+        v-model="brewer"
         label="Nome do cervejeiro"
       />
       <q-input
@@ -36,16 +49,11 @@ const details = defineModel<ProductionDetails>('details', {
         label="Nome da cerveja"
       />
 
-      <q-input
-        class="col-3"
-        outlined
-        v-model="details.equipment"
-        label="Equipamento"
-      />
+      <q-input class="col-3" outlined v-model="equipment" label="Equipamento" />
 
       <q-input
         outlined
-        v-model="details.productionDate"
+        v-model="productionDate"
         label="Data de produção"
         mask="date"
         class="col-3"
@@ -58,7 +66,7 @@ const details = defineModel<ProductionDetails>('details', {
               transition-show="scale"
               transition-hide="scale"
             >
-              <q-date v-model="details.productionDate">
+              <q-date v-model="productionDate">
                 <div class="row items-center justify-end">
                   <q-btn v-close-popup label="Close" color="primary" flat />
                 </div>
@@ -72,7 +80,7 @@ const details = defineModel<ProductionDetails>('details', {
         class="col-12"
         type="textarea"
         outlined
-        v-model="details.goals"
+        v-model="beer.goals"
         label="Objetivos da cerveja"
       />
 
@@ -80,7 +88,7 @@ const details = defineModel<ProductionDetails>('details', {
         class="col-12"
         type="textarea"
         outlined
-        v-model="details.strategies"
+        v-model="strategies"
         label="Estratégias para alcançar os objetivos"
       />
     </div>

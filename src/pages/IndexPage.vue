@@ -2,27 +2,13 @@
 defineOptions({
   name: 'IndexPage',
 })
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { date } from 'quasar'
+import { useParseBatch } from 'src/composables/useParserBF'
 import BasicInfoSection from 'src/components/BasicInfoSection.vue'
 import RecipeSection from 'src/components/RecipeSection.vue'
 import WaterSection from 'src/components/WaterSection.vue'
-import {
-  AuthoringInformation,
-  Beer,
-  ProductionDetails,
-  Fermentable,
-  Hop,
-  Misc,
-  Yeast,
-  WaterProfile,
-  BFBatchScheme,
-  BatchFermentable,
-  BatchHop,
-  BacthYeast,
-  BatchMisc,
-  WaterAdjustments,
-} from 'src/types/models'
+import { RDP } from 'src/types/models'
 
 const upload = ref(false)
 
@@ -34,7 +20,7 @@ function loadContent() {
     console.log(uploadBatch.value)
     reader.onload = (e) => {
       if (e.target && e.target.result != null) {
-        parseBatch(JSON.parse(e.target.result as string))
+        rdp.value = useParseBatch(JSON.parse(e.target.result as string))
         upload.value = false
       }
     }
@@ -42,87 +28,76 @@ function loadContent() {
   }
 }
 
-function parseBatch(content: BFBatchScheme) {
-  const { recipe, batchFermentables, batchYeasts, batchMiscs } = content
-
-  authoring.value.brewer = content.brewer
-  authoring.value.brewery = ''
-
-  beer.value.name = recipe.name
-  beer.value.style = recipe.style.name
-
-  details.value.productionDate = date.formatDate(content.brewDate, 'YYYY/MM/DD')
-  details.value.equipment = recipe.equipment.name
-
-  fermentables.value = parseBacthFermentables(batchFermentables)
-  hopAditions.value = parseBatchHops(recipe.hops)
-  yeasts.value = parseBatchYeast(batchYeasts)
-  others.value = parseBatchMisc(batchMiscs)
-
-  mashWater.value = recipe.data.mashWaterAmount
-  spargeWater.value = recipe.data.mashVolume
-  sourceWater.value = recipe.water.source
-  targetWater.value = recipe.water.target
-  waterAdjustemts.value = recipe.water.mashAdjustments
-}
-
-function parseBacthFermentables(
-  batchFermentables: BatchFermentable[]
-): Fermentable[] {
-  return batchFermentables.map((f) => {
-    const { name, amount } = f
-    return { name, amount }
-  })
-}
-
-function parseBatchHops(batchHops: BatchHop[]): Hop[] {
-  return batchHops.map((h) => {
-    const { name, amount, alpha, use, time, temp, ibu } = h
-    return { name, amount, alpha, use, time, temp, ibu }
-  })
-}
-
-function parseBatchYeast(batchYeast: BacthYeast[]): Yeast[] {
-  return batchYeast.map((y) => {
-    const { name, amount, form, unit } = y
-    return { name, amount, form, unit }
-  })
-}
-
-function parseBatchMisc(batchMisc: BatchMisc[]): Misc[] {
-  return batchMisc.map((m) => {
-    const { name, amount, use, unit } = m
-    return { name, amount, use, unit }
-  })
-}
-
-const authoring = ref<AuthoringInformation>({} as AuthoringInformation)
-const beer = ref<Beer>({} as Beer)
-
-const details = ref<ProductionDetails>({
-  goals: '',
-  strategies: '',
-  productionDate: date.formatDate(Date.now(), 'YYYY/MM/DD'),
-  equipment: '',
+const rdp = ref<RDP>({
+  brewer: '',
+  brewery: '',
+  productionDate: date.formatDate(Date.now(), 'YYYY-MM-DD'),
+  recipe: {
+    beer: {
+      name: '',
+      style: '',
+      goals: '',
+    },
+    equipment: '',
+    strategies: '',
+    fermentables: [],
+    hops: [],
+    yeasts: [],
+    others: [],
+    water: {
+      mash: 0,
+      sparge: 0,
+      source: {
+        calcium: 0,
+        bicarbonate: 0,
+        chloride: 0,
+        magnesium: 0,
+        name: '',
+        sodium: 0,
+        sulfate: 0,
+      },
+      target: {
+        calcium: 0,
+        bicarbonate: 0,
+        chloride: 0,
+        magnesium: 0,
+        name: '',
+        sodium: 0,
+        sulfate: 0,
+      },
+      adjustmens: {
+        calciumCarbonate: 0,
+        calciumChloride: 0,
+        calciumHydroxide: 0,
+        calciumSulfate: 0,
+        magnesiumSulfate: 0,
+        sodiumBicarbonate: 0,
+        sodiumChloride: 0,
+      },
+    },
+  },
 })
 
-const fermentables = ref<Fermentable[]>([])
-const hopAditions = ref<Hop[]>([])
-const others = ref<Misc[]>([])
-const yeasts = ref<Yeast[]>([])
-const mashWater = ref(0)
-const spargeWater = ref(0)
-const sourceWater = ref<WaterProfile>({} as WaterProfile)
-const targetWater = ref<WaterProfile>({} as WaterProfile)
-const waterAdjustemts = ref<WaterAdjustments>({} as WaterAdjustments)
+const fermentables = computed(() => rdp.value.recipe.fermentables)
+const hopAditions = computed(() => rdp.value.recipe.hops)
+const others = computed(() => rdp.value.recipe.others)
+const yeasts = computed(() => rdp.value.recipe.yeasts)
+const mashWater = computed(() => rdp.value.recipe.water.mash)
+const spargeWater = computed(() => rdp.value.recipe.water.sparge)
+const sourceWater = computed(() => rdp.value.recipe.water.source)
+const targetWater = computed(() => rdp.value.recipe.water.target)
+const waterAdjustemts = computed(() => rdp.value.recipe.water.adjustmens)
 </script>
 
 <template>
   <q-page class="row justify-start items-start q-pa-md">
     <basic-info-section
-      :authoring="authoring"
-      :beer="beer"
-      :details="details"
+      :beer="rdp.recipe.beer"
+      :brewer="rdp.brewer"
+      :brewery="rdp.brewery"
+      :equipment="rdp.recipe.equipment"
+      :mash-date="rdp.productionDate"
+      :strategies="rdp.recipe.strategies"
     ></basic-info-section>
     <recipe-section
       :fermentables="fermentables"

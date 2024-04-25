@@ -1,20 +1,3 @@
-export type AuthoringInformation = {
-  brewery: string
-  brewer: string
-}
-
-export type Beer = {
-  name: string
-  style: string
-}
-
-export type ProductionDetails = {
-  goals: string
-  strategies: string
-  productionDate: string
-  equipment: string
-}
-
 export type ProductionState =
   | 'Mostura'
   | 'Lavagem'
@@ -113,7 +96,7 @@ export type BFRecipe = {
   }
 }
 
-export type BFBatchScheme = {
+export type BFBatch = {
   brewer: string
   brewDate: number
   recipe: BFRecipe
@@ -121,6 +104,12 @@ export type BFBatchScheme = {
   batchFermentables: BatchFermentable[]
   batchYeasts: BacthYeast[]
   batchMiscs: BatchMisc[]
+}
+
+export type Beer = {
+  name: string
+  style: string
+  goals: string
 }
 
 export type Fermentable = Pick<BatchFermentable, 'name' | 'amount'>
@@ -149,6 +138,8 @@ export type WaterProfile = Pick<
 >
 
 export type Recipe = {
+  beer: Beer
+  equipment: string
   fermentables: Fermentable[]
   hops: Hop[]
   others: Misc[]
@@ -160,4 +151,12 @@ export type Recipe = {
     target: WaterProfile
     adjustmens: WaterAdjustments
   }
+  strategies: string
+}
+
+export type RDP = {
+  brewery: string
+  brewer: string
+  recipe: Recipe
+  productionDate: string
 }
