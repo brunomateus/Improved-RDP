@@ -1,13 +1,16 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { QTableColumn } from 'quasar'
 import GenericSection from './GenericSection.vue'
 import type { Recipe, Fermentable, Hop, Yeast, Misc } from '../types/models'
-const { fermentables, hops, yeasts, others } =
+const props =
   defineProps<Pick<Recipe, 'fermentables' | 'hops' | 'yeasts' | 'others'>>()
 
-const totalFermentables = fermentables.reduce(
-  (acc: number, current: Fermentable) => acc + current.amount,
-  0
+const totalFermentables = computed(() =>
+  props.fermentables.reduce(
+    (acc: number, current: Fermentable) => acc + current.amount,
+    0
+  )
 )
 
 const fermentablesCols: QTableColumn[] = [
@@ -28,7 +31,7 @@ const fermentablesCols: QTableColumn[] = [
   {
     name: 'Percentage',
     field: (fermentable: Fermentable) =>
-      `${((fermentable.amount / totalFermentables) * 100).toFixed(2)}%`,
+      `${((fermentable.amount / totalFermentables.value) * 100).toFixed(2)}%`,
     label: '%',
     sortable: true,
     align: 'right',

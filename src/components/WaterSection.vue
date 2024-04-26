@@ -105,7 +105,7 @@ const rows = computed(() => [water.source, water.target])
               <q-card class="my-card">
                 <q-card-section class="bg-primary text-white">
                   <div class="text-caption">Sulfato de cálcio</div>
-                  <div class="text-subtitle1">CaSO4</div>
+                  <div class="text-subtitle1">CaSO<sub>4</sub></div>
                 </q-card-section>
                 <q-card-section>
                   {{ adjustments.calciumSulfate || 0 }}
@@ -114,7 +114,7 @@ const rows = computed(() => [water.source, water.target])
               <q-card>
                 <q-card-section class="bg-primary text-white">
                   <div class="text-caption">Cloreto de cálcio</div>
-                  <div class="text-subtitle1">CaCl2</div>
+                  <div class="text-subtitle1">CaCl<sub>2</sub></div>
                 </q-card-section>
                 <q-card-section>
                   {{ adjustments.calciumChloride || 0 }}
@@ -123,7 +123,7 @@ const rows = computed(() => [water.source, water.target])
               <q-card>
                 <q-card-section class="bg-primary text-white">
                   <div class="text-caption">Sulfato de magnésio</div>
-                  <div class="text-subtitle1">MgSO4</div>
+                  <div class="text-subtitle1">MgSO<sub>4</sub></div>
                 </q-card-section>
                 <q-card-section>
                   {{ adjustments.magnesiumSulfate }}
@@ -132,7 +132,7 @@ const rows = computed(() => [water.source, water.target])
               <q-card>
                 <q-card-section class="bg-primary text-white">
                   <div class="text-subtitle2">Hidróxido de Cálcio</div>
-                  <div class="text-subtitle1">Ca(OH)2</div>
+                  <div class="text-subtitle1">Ca(OH)<sub>2</sub></div>
                 </q-card-section>
                 <q-card-section>
                   {{ adjustments.calciumHydroxide || 0 }}
@@ -141,7 +141,7 @@ const rows = computed(() => [water.source, water.target])
               <q-card>
                 <q-card-section class="bg-primary text-white">
                   <div class="text-subtitle2">Bicarbonato de Sódio</div>
-                  <div class="text-subtitle1">NaHCO3</div>
+                  <div class="text-subtitle1">NaHCO<sub>3</sub></div>
                 </q-card-section>
                 <q-card-section>
                   {{ adjustments.sodiumBicarbonate || 0 }}
