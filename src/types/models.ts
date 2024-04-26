@@ -59,6 +59,14 @@ export type BFWater = {
   ph: number
 }
 
+export type BFEquipment = {
+  name: string
+  efficiency: number
+  mashEfficiency: number
+  ambientTemperature: number
+  grainAbsorptionRate: number
+}
+
 export type WaterAdjustments = {
   calciumCarbonate: number
   sodiumBicarbonate: number
@@ -88,12 +96,9 @@ export type BFRecipe = {
     source: BFWater
     target: BFWater
     mashAdjustments: WaterAdjustments
+    mashPh: number
   }
-  equipment: {
-    name: string
-    efficiency: number
-    mashEfficiency: number
-  }
+  equipment: BFEquipment
 }
 
 export type BFBatch = {
@@ -104,6 +109,7 @@ export type BFBatch = {
   batchFermentables: BatchFermentable[]
   batchYeasts: BacthYeast[]
   batchMiscs: BatchMisc[]
+  measuredMashPh: number
 }
 
 export type Beer = {
@@ -111,6 +117,11 @@ export type Beer = {
   style: string
   goals: string
 }
+
+export type Equipament = Pick<
+  BFEquipment,
+  'name' | 'ambientTemperature' | 'grainAbsorptionRate'
+> & { waterGrainRatio: number }
 
 export type Fermentable = Pick<BatchFermentable, 'name' | 'amount'>
 
@@ -135,11 +146,12 @@ export type WaterProfile = Pick<
   | 'magnesium'
   | 'sodium'
   | 'sulfate'
+  | 'ph'
 >
 
 export type Recipe = {
   beer: Beer
-  equipment: string
+  equipment: Equipament
   fermentables: Fermentable[]
   hops: Hop[]
   others: Misc[]
@@ -159,4 +171,17 @@ export type RDP = {
   brewer: string
   recipe: Recipe
   productionDate: string
+  mash: {
+    measurements: {
+      predictions: {
+        ph: number
+        waterTemperature: number
+      }
+      measured: {
+        ph: number
+        adjustedPh: number
+        heatingRate: number
+      }
+    }
+  }
 }

@@ -28,10 +28,19 @@ export function useParseBatch(bfcontent: BFBatch): RDP {
     goals: '',
   }
 
+  const fermentables = parseBacthFermentables(batchFermentables)
+
   const recipe: Recipe = {
     beer,
-    equipment: bfRecipe.equipment.name,
-    fermentables: parseBacthFermentables(batchFermentables),
+    equipment: Object.assign(bfRecipe.equipment, {
+      waterGrainRatio: Number(
+        (
+          bfRecipe.data.mashWaterAmount /
+          fermentables.reduce((acc, current) => acc + current.amount, 0)
+        ).toFixed(2)
+      ),
+    }),
+    fermentables,
     hops: parseBatchHops(bfRecipe.hops),
     yeasts: parseBatchYeast(batchYeasts),
     others: parseBatchMisc(batchMiscs),
@@ -50,6 +59,19 @@ export function useParseBatch(bfcontent: BFBatch): RDP {
     brewery: '',
     productionDate: date.formatDate(bfcontent.brewDate, 'YYYY/MM/DD'),
     recipe,
+    mash: {
+      measurements: {
+        predictions: {
+          ph: recipe.water.source.ph,
+          waterTemperature: bfRecipe.equipment.ambientTemperature,
+        },
+        measured: {
+          ph: bfcontent.measuredMashPh,
+          adjustedPh: 0,
+          heatingRate: 0,
+        },
+      },
+    },
   }
 
   return rdp

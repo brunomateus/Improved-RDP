@@ -8,6 +8,7 @@ import { useParseBatch } from 'src/composables/useParserBF'
 import BasicInfoSection from 'src/components/BasicInfoSection.vue'
 import RecipeSection from 'src/components/RecipeSection.vue'
 import WaterSection from 'src/components/WaterSection.vue'
+import MashSection from 'src/components/MashSection.vue'
 import { RDP } from 'src/types/models'
 
 const upload = ref(false)
@@ -17,7 +18,6 @@ const uploadBatch = ref<File | null>(null)
 function loadContent() {
   if (uploadBatch.value) {
     const reader = new FileReader()
-    console.log(uploadBatch.value)
     reader.onload = (e) => {
       if (e.target && e.target.result != null) {
         rdp.value = useParseBatch(JSON.parse(e.target.result as string))
@@ -38,7 +38,12 @@ const rdp = ref<RDP>({
       style: '',
       goals: '',
     },
-    equipment: '',
+    equipment: {
+      name: '',
+      waterGrainRatio: 0,
+      ambientTemperature: 0,
+      grainAbsorptionRate: 0,
+    },
     strategies: '',
     fermentables: [],
     hops: [],
@@ -55,6 +60,7 @@ const rdp = ref<RDP>({
         name: '',
         sodium: 0,
         sulfate: 0,
+        ph: 0,
       },
       target: {
         calcium: 0,
@@ -64,6 +70,7 @@ const rdp = ref<RDP>({
         name: '',
         sodium: 0,
         sulfate: 0,
+        ph: 0,
       },
       adjustmens: {
         calciumCarbonate: 0,
@@ -73,6 +80,19 @@ const rdp = ref<RDP>({
         magnesiumSulfate: 0,
         sodiumBicarbonate: 0,
         sodiumChloride: 0,
+      },
+    },
+  },
+  mash: {
+    measurements: {
+      predictions: {
+        ph: 0,
+        waterTemperature: 0,
+      },
+      measured: {
+        ph: 0,
+        adjustedPh: 0,
+        heatingRate: 0,
       },
     },
   },
@@ -95,7 +115,7 @@ const waterAdjustemts = computed(() => rdp.value.recipe.water.adjustmens)
       :beer="rdp.recipe.beer"
       :brewer="rdp.brewer"
       :brewery="rdp.brewery"
-      :equipment="rdp.recipe.equipment"
+      :equipment="rdp.recipe.equipment.name"
       :mash-date="rdp.productionDate"
       :strategies="rdp.recipe.strategies"
     ></basic-info-section>
@@ -112,6 +132,16 @@ const waterAdjustemts = computed(() => rdp.value.recipe.water.adjustmens)
       :target="targetWater"
       :adjustments="waterAdjustemts"
     ></water-section>
+    <mash-section
+      :water-volume="rdp.recipe.water.mash"
+      :water-temperature="rdp.mash.measurements.predictions.waterTemperature"
+      :predicted-ph="rdp.mash.measurements.predictions.ph"
+      :measured-ph="rdp.mash.measurements.measured.ph"
+      :adjusted-ph="rdp.mash.measurements.measured.adjustedPh"
+      :grain-absorption-rate="rdp.recipe.equipment.grainAbsorptionRate"
+      :water-grain-ratio="rdp.recipe.equipment.waterGrainRatio"
+    ></mash-section>
+
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
       <q-fab icon="keyboard_arrow_up" direction="up" color="primary">
         <q-fab-action
