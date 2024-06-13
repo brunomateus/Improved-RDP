@@ -1,5 +1,32 @@
 <script setup lang="ts">
 import { QTableColumn } from 'quasar'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  TimeScale,
+  ChartOptions,
+} from 'chart.js'
+import 'chartjs-adapter-moment'
+import { Line } from 'vue-chartjs'
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  TimeScale,
+  Title,
+  Tooltip,
+  Legend
+)
+
+ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale)
 import GenericSection from './GenericSection.vue'
 import { MashStep } from 'src/types/models'
 const mashWater = defineModel<number>('waterVolume', {
@@ -65,6 +92,60 @@ const fermentablesCols: QTableColumn[] = [
     align: 'right',
   },
 ]
+
+const chartData = {
+  datasets: [
+    {
+      label: 'Rampas',
+      data: [
+        {
+          x: 0,
+          y: 30,
+          name: 'Aquecendo',
+        },
+        {
+          x: 5,
+          y: 60,
+          name: 'Alpha amilase',
+        },
+        {
+          x: 35,
+          y: 60,
+          name: 'Alpha amilase',
+        },
+        {
+          x: 45,
+          y: 70,
+          name: 'Beta amilase',
+        },
+        {
+          x: 75,
+          y: 70,
+          name: 'Beta amilase',
+        },
+      ],
+    },
+  ],
+}
+const chartOptions: ChartOptions<'line'> = {
+  responsive: true,
+  scales: {
+    x: {
+      type: 'linear' as const,
+    },
+    y: {
+      max: 80,
+    },
+  },
+  plugins: {
+    tooltip: {
+      callbacks: {
+        title: () => '',
+        label: (ctx) => `${ctx.raw.name} ${ctx.formattedValue}`,
+      },
+    },
+  },
+}
 </script>
 
 <template>
@@ -121,7 +202,7 @@ const fermentablesCols: QTableColumn[] = [
         label="Taxa de absorção dos grãos (L/Kg)"
       />
     </div>
-    <h4>Steps</h4>
+    <h4>Perfil de mostura</h4>
     <div class="row items-stretch q-col-gutter-md">
       <div class="col-6">
         <q-table
@@ -131,7 +212,9 @@ const fermentablesCols: QTableColumn[] = [
           row-key="name"
         />
       </div>
-      <div class="col-6"></div>
+      <div class="col-6">
+        <Line id="my-chart-id" :options="chartOptions" :data="chartData" />
+      </div>
     </div>
   </generic-section>
 </template>
