@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { QTableColumn } from 'quasar'
 import GenericSection from './GenericSection.vue'
+import { MashStep } from 'src/types/models'
 const mashWater = defineModel<number>('waterVolume', {
   required: true,
 })
@@ -35,6 +37,34 @@ const adjustedPh = defineModel<number>('adjustedPh', {
 const acid = defineModel<number>('acid', {
   required: false,
 })
+
+const steps = defineModel<MashStep[]>('steps', {
+  required: true,
+})
+
+const fermentablesCols: QTableColumn[] = [
+  {
+    name: 'Nome',
+    label: 'Nome',
+    field: 'name',
+    sortable: true,
+    align: 'left',
+  },
+  {
+    name: 'Temperatura',
+    label: 'Temperatura',
+    field: 'temperature',
+    sortable: true,
+    align: 'right',
+  },
+  {
+    name: 'Duration',
+    field: 'duration',
+    label: 'Tempo',
+    sortable: true,
+    align: 'right',
+  },
+]
 </script>
 
 <template>
@@ -92,5 +122,16 @@ const acid = defineModel<number>('acid', {
       />
     </div>
     <h4>Steps</h4>
+    <div class="row items-stretch q-col-gutter-md">
+      <div class="col-6">
+        <q-table
+          class="full-height"
+          :rows="steps"
+          :columns="fermentablesCols"
+          row-key="name"
+        />
+      </div>
+      <div class="col-6"></div>
+    </div>
   </generic-section>
 </template>

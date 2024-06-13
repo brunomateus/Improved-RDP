@@ -82,6 +82,7 @@ const rdp = ref<RDP>({
         sodiumChloride: 0,
       },
     },
+    mash: [],
   },
   mash: {
     measurements: {
@@ -140,6 +141,7 @@ const waterAdjustemts = computed(() => rdp.value.recipe.water.adjustmens)
       :adjusted-ph="rdp.mash.measurements.measured.adjustedPh"
       :grain-absorption-rate="rdp.recipe.equipment.grainAbsorptionRate"
       :water-grain-ratio="rdp.recipe.equipment.waterGrainRatio"
+      :steps="rdp.recipe.mash"
     ></mash-section>
 
     <q-page-sticky position="bottom-right" :offset="[18, 18]">

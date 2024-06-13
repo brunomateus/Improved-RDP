@@ -99,6 +99,17 @@ export type BFRecipe = {
     mashPh: number
   }
   equipment: BFEquipment
+  mash: {
+    name: string
+    steps: BFMashStep[]
+  }
+}
+
+export type BFMashStep = {
+  stepTemp: number
+  name: string
+  rampTime: number
+  stepTime: number
 }
 
 export type BFBatch = {
@@ -149,6 +160,12 @@ export type WaterProfile = Pick<
   | 'ph'
 >
 
+export type MashStep = {
+  name: string
+  temperature: number
+  duration: number
+}
+
 export type Recipe = {
   beer: Beer
   equipment: Equipament
@@ -163,6 +180,7 @@ export type Recipe = {
     target: WaterProfile
     adjustmens: WaterAdjustments
   }
+  mash: MashStep[]
   strategies: string
 }
 

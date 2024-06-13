@@ -1,17 +1,18 @@
 import { date } from 'quasar'
-import type {
-  BFBatch,
-  BacthYeast,
-  BatchFermentable,
-  BatchHop,
-  BatchMisc,
-  Beer,
-  Fermentable,
-  Hop,
-  Misc,
-  Recipe,
-  Yeast,
-  RDP,
+import {
+  type BFBatch,
+  type BacthYeast,
+  type BatchFermentable,
+  type BatchHop,
+  type BatchMisc,
+  type Beer,
+  type Fermentable,
+  type Hop,
+  type Misc,
+  type Recipe,
+  type Yeast,
+  type RDP,
+  MashStep,
 } from 'src/types/models'
 
 export function useParseBatch(bfcontent: BFBatch): RDP {
@@ -52,6 +53,11 @@ export function useParseBatch(bfcontent: BFBatch): RDP {
       adjustmens: bfRecipe.water.mashAdjustments,
     },
     strategies: '',
+    mash: bfRecipe.mash.steps.map<MashStep>((s) => ({
+      name: s.name,
+      temperature: s.stepTemp,
+      duration: s.stepTime,
+    })),
   }
 
   const rdp: RDP = {
