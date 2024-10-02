@@ -45,7 +45,7 @@ const steps = defineModel<MashStep[]>('steps', {
   required: true,
 })
 
-const fermentablesCols: QTableColumn[] = [
+const stepsCols: QTableColumn[] = [
   {
     name: 'Nome',
     label: 'Nome',
@@ -130,7 +130,7 @@ const fermentablesCols: QTableColumn[] = [
         <q-table
           class="full-height"
           :rows="steps"
-          :columns="fermentablesCols"
+          :columns="stepsCols"
           row-key="name"
         />
       </div>

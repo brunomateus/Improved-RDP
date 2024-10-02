@@ -12,7 +12,7 @@ import {
   ChartOptions,
 } from 'chart.js'
 import 'chartjs-adapter-moment'
-import { computed } from 'vue'
+import { computed, defineProps } from 'vue'
 import { Line } from 'vue-chartjs'
 import { MashStep } from 'src/types/models'
 
@@ -29,9 +29,7 @@ ChartJS.register(
 
 ChartJS.register(Title, Tooltip, Legend, LineElement, LinearScale)
 
-const steps = defineModel<MashStep[]>('steps', {
-  required: true,
-})
+const props = defineProps<{ steps: MashStep[]}>()
 
 type MashChartPoint = {
   x: number
@@ -49,19 +47,19 @@ const max = computed(
 function convertData() {
   const data: MashChartPoint[] = []
   let timeAccumulator = 0
-  for (let i = 0; i < steps.value.length; i++) {
+  for (let i = 0; i < props.steps.length; i++) {
     timeAccumulator += 5
 
     data.push({
       x: timeAccumulator,
-      y: steps.value[i].temperature,
-      name: steps.value[i].name,
+      y: props.steps[i].temperature,
+      name: props.steps[i].name,
     })
-    timeAccumulator += steps.value[i].duration
+    timeAccumulator += props.steps[i].duration
     data.push({
       x: timeAccumulator,
-      y: steps.value[i].temperature,
-      name: steps.value[i].name,
+      y: props.steps[i].temperature,
+      name: props.steps[i].name,
     })
   }
   return data
